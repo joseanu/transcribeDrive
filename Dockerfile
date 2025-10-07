@@ -10,14 +10,15 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
-RUN apk add --no-cache ffmpeg \
+RUN apk add --no-cache ffmpeg su-exec \
     && addgroup -S app \
     && adduser -S app -G app \
-    && mkdir -p /home/app/Downloads
+    && mkdir -p /app/jobs /app/Downloads
 COPY --from=deps /opt/venv /opt/venv
 COPY app.py ./
 COPY requirements.txt ./
-RUN chown -R app:app /app /home/app
-USER app
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 EXPOSE 8080
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
