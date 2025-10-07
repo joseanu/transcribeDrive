@@ -149,9 +149,11 @@ def _process_job(job_id: str, payload: Dict[str, object]) -> None:
         transcript_data = _transcribe_audio(job_id, upload_url, language, speaker_labels, format_text, punctuate, speech_model)
 
         status_value = transcript_data.get("status")
+        transcript_id = transcript_data.get("id")
         if status_value == "completed":
             callback_payload = {
                 "job_id": job_id,
+                "transcript_id": transcript_id,
                 "status": "completed",
                 "text": transcript_data.get("text", ""),
                 "duration_seconds": transcript_data.get("audio_duration", 0),
@@ -161,6 +163,7 @@ def _process_job(job_id: str, payload: Dict[str, object]) -> None:
         else:
             callback_payload = {
                 "job_id": job_id,
+                "transcript_id": transcript_id,
                 "status": "error",
                 "error": transcript_data.get("error", "Transcription failed"),
             }
@@ -175,6 +178,8 @@ def _process_job(job_id: str, payload: Dict[str, object]) -> None:
             "status": "error",
             "error": str(exc),
         }
+        if "transcript_id" in locals():
+            error_payload["transcript_id"] = locals()["transcript_id"]
         _send_callback(callback_url, error_payload)
     finally:
         if success or not settings.keep_failed_jobs:

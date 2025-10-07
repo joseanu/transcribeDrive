@@ -91,3 +91,5 @@ When `DOWNLOAD_VIDEO_FIRST=true`, the raw Google Drive file is saved in `DOWNLOA
 If streaming extraction fails because the Drive file is not stream-friendly, the service automatically falls back to downloading the full video inside `jobs/<job_id>` and converts it from disk.
 
 Auto-downloaded videos now land in `/app/Downloads` by default; the conversions and fallback MP3s stay under `/app/jobs`.
+
+Callbacks now include `transcript_id` alongside `job_id`, so you can correlate with AssemblyAI directly.
