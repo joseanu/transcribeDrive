@@ -15,7 +15,7 @@ Set these environment variables before starting the service:
   - `JOBS_DIR` – working directory for job files (default `./jobs`).
   - `KEEP_FAILED_JOBS` – keep failed job folders on disk for inspection (default disabled).
   - `DOWNLOAD_VIDEO_FIRST` – set to `true` to save the Drive video locally before extracting audio.
-  - `DOWNLOAD_VIDEO_DIR` – where to save the video when the previous flag is enabled (default `~/Downloads`).
+  - `DOWNLOAD_VIDEO_DIR` – where to save the video when the previous flag is enabled (default `/app/Downloads`).
   - `POLL_INTERVAL_SEC` – seconds between AssemblyAI status checks (default 10).
   - `POLL_TIMEOUT_MIN` – stop polling after this many minutes (default 120).
   - `REQUEST_TIMEOUT_SEC` – per-request timeout for most HTTP calls (default 30).
@@ -86,6 +86,8 @@ The service listens on port 8080 by default.
 
 During debugging, the service now preserves `ffmpeg_stderr.log` and, if OAuth fails, `google_token_error.json` under each `jobs/<job_id>` when `KEEP_FAILED_JOBS=true`. Work directories are only deleted after success or when the flag is false.
 
-When `DOWNLOAD_VIDEO_FIRST=true`, the raw Google Drive file is saved in `DOWNLOAD_VIDEO_DIR` (default `~/Downloads`) before running ffmpeg, so you can inspect or reprocess it manually if streaming conversion continues to fail.
+When `DOWNLOAD_VIDEO_FIRST=true`, the raw Google Drive file is saved in `DOWNLOAD_VIDEO_DIR` (default `/app/Downloads`) before running ffmpeg, so you can inspect or reprocess it manually if streaming conversion continues to fail.
 
 If streaming extraction fails because the Drive file is not stream-friendly, the service automatically falls back to downloading the full video inside `jobs/<job_id>` and converts it from disk.
+
+Auto-downloaded videos now land in `/app/Downloads` by default; the conversions and fallback MP3s stay under `/app/jobs`.
