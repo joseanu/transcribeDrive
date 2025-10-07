@@ -87,3 +87,5 @@ The service listens on port 8080 by default.
 During debugging, the service now preserves `ffmpeg_stderr.log` and, if OAuth fails, `google_token_error.json` under each `jobs/<job_id>` when `KEEP_FAILED_JOBS=true`. Work directories are only deleted after success or when the flag is false.
 
 When `DOWNLOAD_VIDEO_FIRST=true`, the raw Google Drive file is saved in `DOWNLOAD_VIDEO_DIR` (default `~/Downloads`) before running ffmpeg, so you can inspect or reprocess it manually if streaming conversion continues to fail.
+
+If streaming extraction fails because the Drive file is not stream-friendly, the service automatically falls back to downloading the full video inside `jobs/<job_id>` and converts it from disk.

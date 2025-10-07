@@ -5,6 +5,23 @@ services:
     image: transcribe-drive:local
     ports:
       - "8080:8080"
-    env_file:
-      - .env
+    environment:
+      SERVICE_AUTH_TOKEN: "${SERVICE_AUTH_TOKEN}"
+      GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+      GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
+      GOOGLE_REFRESH_TOKEN: "${GOOGLE_REFRESH_TOKEN}"
+      ASSEMBLYAI_API_KEY: "${ASSEMBLYAI_API_KEY}"
+      MAX_VIDEO_MB: "${MAX_VIDEO_MB:-}"
+      POLL_INTERVAL_SEC: "${POLL_INTERVAL_SEC:-10}"
+      POLL_TIMEOUT_MIN: "${POLL_TIMEOUT_MIN:-120}"
+      REQUEST_TIMEOUT_SEC: "${REQUEST_TIMEOUT_SEC:-30}"
+      DRIVE_DOWNLOAD_TIMEOUT_SEC: "${DRIVE_DOWNLOAD_TIMEOUT_SEC:-300}"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      JOBS_DIR: "${JOBS_DIR:-/app/jobs}"
+      KEEP_FAILED_JOBS: "${KEEP_FAILED_JOBS:-false}"
+      DOWNLOAD_VIDEO_FIRST: "${DOWNLOAD_VIDEO_FIRST:-false}"
+      DOWNLOAD_VIDEO_DIR: "${DOWNLOAD_VIDEO_DIR:-/home/app/Downloads}"
+    volumes:
+      - ./jobs:/app/jobs
+      - ./downloads:/home/app/Downloads
     restart: unless-stopped

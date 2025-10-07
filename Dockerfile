@@ -12,10 +12,12 @@ ENV PATH="/opt/venv/bin:$PATH" \
 WORKDIR /app
 RUN apk add --no-cache ffmpeg \
     && addgroup -S app \
-    && adduser -S app -G app
+    && adduser -S app -G app \
+    && mkdir -p /home/app/Downloads
 COPY --from=deps /opt/venv /opt/venv
 COPY app.py ./
 COPY requirements.txt ./
+RUN chown -R app:app /app /home/app
 USER app
 EXPOSE 8080
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
